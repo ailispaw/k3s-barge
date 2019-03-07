@@ -1,0 +1,43 @@
+#!/bin/sh
+
+if [ ! -x /opt/bin/k3s ]; then
+  exit
+fi
+
+if [ -f /etc/default/k3s ]; then
+  source /etc/default/k3s
+fi
+
+case "$1" in
+  start)
+    # Setup cgroups
+    mkdir -p /sys/fs/cgroup
+    if ! mountpoint -q /sys/fs/cgroup; then
+      mount -t tmpfs cgroup /sys/fs/cgroup
+    fi
+    for i in $(awk '!/^#/ { if ($4 == 1) print $1 }' /proc/cgroups); do
+      mkdir -p /sys/fs/cgroup/$i
+      if ! mountpoint -q /sys/fs/cgroup/$i; then
+        mount -t cgroup -o $i cgroup /sys/fs/cgroup/$i
+      fi
+    done
+
+    printf "Starting k3s Server: "
+    start-stop-daemon -S -q -m -b -p /var/run/k3s-server.pid --exec /opt/bin/k3s server -- \
+      --log /var/log/k3s-server.log ${K3S_EXTRA_ARGS}
+    [ $? = 0 ] && echo "OK" || echo "FAIL"
+    ;;
+  stop)
+    printf "Stopping k3s Server: "
+    start-stop-daemon -K -q -p /var/run/k3s-server.pid
+    [ $? = 0 ] && echo "OK" || echo "FAIL"
+    ;;
+  restart)
+    "$0" stop
+    sleep 1
+    "$0" start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    ;;
+esac
