@@ -4,8 +4,8 @@ if [ ! -x /opt/bin/k3s ]; then
   exit
 fi
 
-if [ -f /etc/default/k3s-server ]; then
-  source /etc/default/k3s-server
+if [ -f /etc/default/k3s-agent ]; then
+  source /etc/default/k3s-agent
 fi
 
 case "$1" in
@@ -22,14 +22,15 @@ case "$1" in
       fi
     done
 
-    printf "Starting k3s Server: "
-    start-stop-daemon -S -q -m -b -p /var/run/k3s-server.pid --exec /opt/bin/k3s server -- \
-      --log /var/log/k3s-server.log ${K3S_EXTRA_ARGS}
+    printf "Starting k3s Agent: "
+    start-stop-daemon -S -q -m -b -p /var/run/k3s-agent.pid --exec /bin/bash -- -c \
+      "exec /opt/bin/k3s agent --server ${SERVER_URL} --token ${NODE_TOKEN} \
+        ${K3S_EXTRA_ARGS} &> /var/log/k3s-agent.log"
     [ $? = 0 ] && echo "OK" || echo "FAIL"
     ;;
   stop)
-    printf "Stopping k3s Server: "
-    start-stop-daemon -K -q -p /var/run/k3s-server.pid
+    printf "Stopping k3s Agent: "
+    start-stop-daemon -K -q -p /var/run/k3s-agent.pid
     [ $? = 0 ] && echo "OK" || echo "FAIL"
     ;;
   restart)

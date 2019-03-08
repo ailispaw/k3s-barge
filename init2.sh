@@ -1,9 +1,10 @@
 
 # Make data persistent
-for i in lib/cni lib/rancher log/containers log/pods ; do
-  rm -f "/var/$i"
-  mkdir -p "/mnt/data/var/$i"
-  ln -s "/mnt/data/var/$i" "/var/$i"
+for i in var/lib/cni var/lib/rancher var/log/containers var/log/pods \
+  run/containerd run/flannel run/k3s ; do
+  rm -rf "/$i"
+  mkdir -p "/mnt/data/$i"
+  ln -s "/mnt/data/$i" "/$i"
 done
 
 # Mount the local folder at /vagrant
