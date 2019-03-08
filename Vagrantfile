@@ -24,7 +24,6 @@ Vagrant.configure(2) do |config|
       wget -nv https://github.com/rancher/k3s/releases/download/#{K3S_VERSION}/k3s -O /opt/bin/k3s
       chmod +x /opt/bin/k3s
 
-      bash /vagrant/init2.sh
       cat /vagrant/init2.sh >> /etc/init.d/init.sh
 
       cd /opt/bin
