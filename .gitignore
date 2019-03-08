@@ -1,2 +1,4 @@
 .vagrant/
 .ssh_config
+master-ip
+node-token
