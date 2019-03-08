@@ -17,6 +17,13 @@ Vagrant.configure(2) do |config|
   config.vm.network :public_network, bridge: NETWORK_ADAPTOR, use_dhcp_assigned_default_route: true
   config.vm.synced_folder ".", "/vagrant", id: "vagrant"
 
+  config.vm.provision :shell, run: "always" do |sh|
+    sh.inline = <<-EOT
+      # Ensure the default gateway is eth1
+      route del default dev eth0 2>/dev/null || true
+    EOT
+  end
+
   config.vm.provision :shell do |sh|
     sh.inline = <<-EOT
       set -e
