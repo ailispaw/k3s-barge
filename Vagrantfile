@@ -70,7 +70,13 @@ Vagrant.configure(2) do |config|
       node.vm.hostname = "node-%02d.k3s.local" % i
       node.vm.provision :shell do |sh|
         sh.inline = <<-EOT
-          k3s agent --server https://$(cat /vagrant/master-ip):6443 --token $(cat /vagrant/node-token) &> /var/log/k3s-agent.log &
+          echo "SERVER_URL=\\"https://$(cat /vagrant/master-ip):6443\\"" > /etc/default/k3s-agent
+          echo "NODE_TOKEN=\\"$(cat /vagrant/node-token)\\"" >> /etc/default/k3s-agent
+
+          cd /etc/init.d
+          cp /vagrant/k3s-agent k3s-agent
+          ln -s k3s-agent S71k3s-agent
+          /etc/init.d/k3s-agent start
         EOT
       end
     end
