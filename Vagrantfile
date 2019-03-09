@@ -28,16 +28,21 @@ Vagrant.configure(2) do |config|
     sh.inline = <<-EOT
       set -e
 
-      echo "Installing k3s..."
-      wget -nv https://github.com/rancher/k3s/releases/download/#{K3S_VERSION}/k3s -O /opt/bin/k3s
-      chmod +x /opt/bin/k3s
-
       # Stop Docker
       /etc/init.d/docker stop
       rm -f /etc/init.d/S60docker
 
-      bash /vagrant/init2.sh
-      cat /vagrant/init2.sh >> /etc/init.d/init.sh
+      bash /vagrant/scripts/init2.sh
+      cat /vagrant/scripts/init2.sh >> /etc/init.d/init.sh
+
+      echo "Installing k3s..."
+      mkdir -p /vagrant/dl
+      if [ ! -f "/vagrant/dl/k3s-#{K3S_VERSION}" ]; then
+        wget -nv https://github.com/rancher/k3s/releases/download/#{K3S_VERSION}/k3s \
+          -O /vagrant/dl/k3s-#{K3S_VERSION}
+      fi
+      cp -f /vagrant/dl/k3s-#{K3S_VERSION} /opt/bin/k3s
+      chmod +x /opt/bin/k3s
 
       cd /opt/bin
       ln -s k3s crictl
@@ -57,7 +62,7 @@ Vagrant.configure(2) do |config|
         kubectl completion bash > /etc/bash_completion.d/kubectl
 
         cd /etc/init.d
-        cp /vagrant/k3s-server k3s-server
+        cp /vagrant/scripts/k3s-server k3s-server
         ln -s k3s-server S70k3s-server
         /etc/init.d/k3s-server start
   
@@ -81,7 +86,7 @@ Vagrant.configure(2) do |config|
           echo "NODE_TOKEN=\\"$(cat /vagrant/node-token)\\"" >> /etc/default/k3s-agent
 
           cd /etc/init.d
-          cp /vagrant/k3s-agent k3s-agent
+          cp /vagrant/scripts/k3s-agent k3s-agent
           ln -s k3s-agent S71k3s-agent
           /etc/init.d/k3s-agent start
         EOT
