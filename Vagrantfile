@@ -8,7 +8,7 @@ module VagrantPlugins
   end
 end
 
-K3S_VERSION     = "v0.1.0"
+K3S_VERSION     = "v0.2.0"
 NETWORK_ADAPTOR = "en0: Wi-Fi (Wireless)"
 NUM_OF_NODES    = 2
 
