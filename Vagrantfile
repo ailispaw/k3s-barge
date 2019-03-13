@@ -16,6 +16,9 @@ Vagrant.configure(2) do |config|
   config.vm.box = "ailispaw/barge"
   config.vm.network :public_network, bridge: NETWORK_ADAPTOR, use_dhcp_assigned_default_route: true
   config.vm.synced_folder ".", "/vagrant", id: "vagrant"
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--groups", "/k3s-barge"]
+  end
 
   config.vm.provision :shell, run: "always" do |sh|
     sh.inline = <<-EOT
