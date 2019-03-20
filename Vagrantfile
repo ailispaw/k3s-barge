@@ -53,11 +53,20 @@ Vagrant.configure(2) do |config|
 
       source /etc/os-release
       echo "Welcome to ${PRETTY_NAME}, k3s version #{K3S_VERSION}" > /etc/motd
+
+      mkdir -p /vagrant/config
+      macaddr=$(cat /sys/class/net/eth1/address)
+      echo -n ${macaddr//:} > /vagrant/config/$(hostname -s)-mac
     EOT
   end
 
   config.vm.define "master" do |node|
     node.vm.hostname = "master.k3s.local"
+    if (File.exist?("config/master-mac"))
+      node.vm.provider :virtualbox do |vb|
+        vb.customize ["modifyvm", :id, "--macaddress2", File.read("config/master-mac")]
+      end
+    end
     node.vm.provision :shell do |sh|
       sh.inline = <<-EOT
         cd /opt/bin
@@ -83,6 +92,11 @@ Vagrant.configure(2) do |config|
   (1..NUM_OF_NODES).each do |i|
     config.vm.define "node-%02d" % i do |node|
       node.vm.hostname = "node-%02d.k3s.local" % i
+      if (File.exist?("config/node-%02d-mac" % i))
+        node.vm.provider :virtualbox do |vb|
+          vb.customize ["modifyvm", :id, "--macaddress2", File.read("config/node-%02d-mac" % i)]
+        end
+      end
       node.vm.provision :shell do |sh|
         sh.inline = <<-EOT
           echo "SERVER_URL=\\"https://$(cat /vagrant/config/master-ip):6443\\"" > /etc/default/k3s-agent
