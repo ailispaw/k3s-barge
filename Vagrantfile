@@ -68,14 +68,14 @@ Vagrant.configure(2) do |config|
         cp /vagrant/scripts/k3s-server k3s-server
         ln -s k3s-server S70k3s-server
         /etc/init.d/k3s-server start
-  
-        ifconfig eth1 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\\.){3}[0-9]*).*/\\2/p' > /vagrant/master-ip
+
+        ifconfig eth1 | sed -En 's/.*inet (addr:)?(([0-9]*\\.){3}[0-9]*).*/\\2/p' > /vagrant/config/master-ip
 
         NODE_TOKEN="/var/lib/rancher/k3s/server/node-token"
         while [ ! -f ${NODE_TOKEN} ]; do
           sleep 1
         done
-        cp ${NODE_TOKEN} /vagrant/node-token
+        cp ${NODE_TOKEN} /vagrant/config/node-token
       EOT
     end
   end
@@ -85,8 +85,8 @@ Vagrant.configure(2) do |config|
       node.vm.hostname = "node-%02d.k3s.local" % i
       node.vm.provision :shell do |sh|
         sh.inline = <<-EOT
-          echo "SERVER_URL=\\"https://$(cat /vagrant/master-ip):6443\\"" > /etc/default/k3s-agent
-          echo "NODE_TOKEN=\\"$(cat /vagrant/node-token)\\"" >> /etc/default/k3s-agent
+          echo "SERVER_URL=\\"https://$(cat /vagrant/config/master-ip):6443\\"" > /etc/default/k3s-agent
+          echo "NODE_TOKEN=\\"$(cat /vagrant/config/node-token)\\"" >> /etc/default/k3s-agent
 
           cd /etc/init.d
           cp /vagrant/scripts/k3s-agent k3s-agent

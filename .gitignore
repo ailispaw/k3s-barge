@@ -1,5 +1,4 @@
 .vagrant/
 .ssh_config
+config/
 dl/
-master-ip
-node-token
