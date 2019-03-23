@@ -15,9 +15,9 @@ This repo creates the k3s environment on [Barge](https://github.com/bargees/barg
 
 It will create one k3s server node with its agent and two agent nodes by default.
 
-Note) You may need to change `NETWORK_ADAPTOR` variable in `Vagrantfile` for your network.
-
 ```
+$ VBoxManage natnetwork add --netname natnet1 --network "192.168.15.0/24"
+$ VBoxManage natnetwork start --netname natnet1
 $ vagrant up
 ```
 
@@ -27,8 +27,8 @@ $ vagrant up
 $ vagrant ssh master
 Welcome to Barge 2.12.0, k3s version v0.3.0 (9a1a1ec)
 [bargee@master ~]$ kubectl get nodes -o wide
-NAME      STATUS   ROLES    AGE   VERSION         INTERNAL-IP    EXTERNAL-IP   OS-IMAGE       KERNEL-VERSION   CONTAINER-RUNTIME
-master    Ready    <none>   52s   v1.13.5-k3s.1   192.168.0.9    <none>        Barge 2.12.0   4.14.105-barge   containerd://1.2.4+unknown
-node-01   Ready    <none>   35s   v1.13.5-k3s.1   192.168.0.10   <none>        Barge 2.12.0   4.14.105-barge   containerd://1.2.4+unknown
-node-02   Ready    <none>   20s   v1.13.5-k3s.1   192.168.0.11   <none>        Barge 2.12.0   4.14.105-barge   containerd://1.2.4+unknown
+NAME      STATUS   ROLES    AGE   VERSION         INTERNAL-IP      EXTERNAL-IP   OS-IMAGE       KERNEL-VERSION   CONTAINER-RUNTIME
+master    Ready    <none>   29s   v1.13.5-k3s.1   192.168.15.100   <none>        Barge 2.12.0   4.14.105-barge   containerd://1.2.4+unknown
+node-01   Ready    <none>   15s   v1.13.5-k3s.1   192.168.15.101   <none>        Barge 2.12.0   4.14.105-barge   containerd://1.2.4+unknown
+node-02   Ready    <none>   2s    v1.13.5-k3s.1   192.168.15.102   <none>        Barge 2.12.0   4.14.105-barge   containerd://1.2.4+unknown
 ```
