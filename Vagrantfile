@@ -60,6 +60,7 @@ Vagrant.configure(2) do |config|
   config.vm.define "master" do |node|
     node.vm.hostname = "master.k3s.local"
     node.vm.network :private_network, ip: "#{BASE_IP_ADDR}.100"
+    node.vm.network :forwarded_port, guest: 8080, host: 8080
     node.vm.provision :shell do |sh|
       sh.inline = <<-EOT
         cd /opt/bin
@@ -84,6 +85,7 @@ Vagrant.configure(2) do |config|
     config.vm.define "node-%02d" % i do |node|
       node.vm.hostname = "node-%02d.k3s.local" % i
       node.vm.network :private_network, ip: "#{BASE_IP_ADDR}.#{100+i}"
+      node.vm.network :forwarded_port, guest: 8080, host: 8080+i
       node.vm.provision :shell do |sh|
         sh.inline = <<-EOT
           echo "SERVER_URL=\\"https://#{BASE_IP_ADDR}.100:6443\\"" > /etc/default/k3s-agent
