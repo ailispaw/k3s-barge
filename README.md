@@ -25,10 +25,10 @@ $ vagrant up
 
 ```
 $ vagrant ssh master
-Welcome to Barge 2.12.0, k3s version v0.2.0
+Welcome to Barge 2.12.0, k3s version v0.3.0 (9a1a1ec)
 [bargee@master ~]$ kubectl get nodes -o wide
 NAME      STATUS   ROLES    AGE   VERSION         INTERNAL-IP    EXTERNAL-IP   OS-IMAGE       KERNEL-VERSION   CONTAINER-RUNTIME
-master    Ready    <none>   52s   v1.13.4-k3s.1   192.168.0.48   <none>        Barge 2.12.0   4.14.105-barge   containerd://1.2.4+unknown
-node-01   Ready    <none>   35s   v1.13.4-k3s.1   192.168.0.49   <none>        Barge 2.12.0   4.14.105-barge   containerd://1.2.4+unknown
-node-02   Ready    <none>   20s   v1.13.4-k3s.1   192.168.0.50   <none>        Barge 2.12.0   4.14.105-barge   containerd://1.2.4+unknown
+master    Ready    <none>   52s   v1.13.5-k3s.1   192.168.0.9    <none>        Barge 2.12.0   4.14.105-barge   containerd://1.2.4+unknown
+node-01   Ready    <none>   35s   v1.13.5-k3s.1   192.168.0.10   <none>        Barge 2.12.0   4.14.105-barge   containerd://1.2.4+unknown
+node-02   Ready    <none>   20s   v1.13.5-k3s.1   192.168.0.11   <none>        Barge 2.12.0   4.14.105-barge   containerd://1.2.4+unknown
 ```

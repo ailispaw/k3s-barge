@@ -8,7 +8,7 @@ module VagrantPlugins
   end
 end
 
-K3S_VERSION     = "v0.2.0"
+K3S_VERSION     = "v0.3.0"
 NETWORK_ADAPTOR = "en0: Wi-Fi (Wireless)"
 NUM_OF_NODES    = 2
 
@@ -52,7 +52,7 @@ Vagrant.configure(2) do |config|
       crictl completion > /etc/bash_completion.d/crictl
 
       source /etc/os-release
-      echo "Welcome to ${PRETTY_NAME}, k3s version #{K3S_VERSION}" > /etc/motd
+      echo "Welcome to ${PRETTY_NAME}, $(k3s --version)" > /etc/motd
 
       mkdir -p /vagrant/config
       macaddr=$(cat /sys/class/net/eth1/address)
