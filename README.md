@@ -15,8 +15,6 @@ This repo creates the k3s environment on [Barge](https://github.com/bargees/barg
 
 It will create one k3s server node with its agent and two agent nodes by default.
 
-Note) You may need to change `NETWORK_ADAPTOR` variable in `Vagrantfile` for your network.
-
 ```
 $ vagrant up
 ```
@@ -25,10 +23,10 @@ $ vagrant up
 
 ```
 $ vagrant ssh master
-Welcome to Barge 2.12.0, k3s version v0.3.0 (9a1a1ec)
+Welcome to Barge 2.12.1, k3s version v0.4.0 (7822549f)
 [bargee@master ~]$ kubectl get nodes -o wide
-NAME      STATUS   ROLES    AGE   VERSION         INTERNAL-IP    EXTERNAL-IP   OS-IMAGE       KERNEL-VERSION   CONTAINER-RUNTIME
-master    Ready    <none>   52s   v1.13.5-k3s.1   192.168.0.9    <none>        Barge 2.12.0   4.14.105-barge   containerd://1.2.4+unknown
-node-01   Ready    <none>   35s   v1.13.5-k3s.1   192.168.0.10   <none>        Barge 2.12.0   4.14.105-barge   containerd://1.2.4+unknown
-node-02   Ready    <none>   20s   v1.13.5-k3s.1   192.168.0.11   <none>        Barge 2.12.0   4.14.105-barge   containerd://1.2.4+unknown
+NAME      STATUS   ROLES    AGE   VERSION         INTERNAL-IP      EXTERNAL-IP   OS-IMAGE       KERNEL-VERSION   CONTAINER-RUNTIME
+master    Ready    <none>   31s   v1.14.1-k3s.4   192.168.65.100   <none>        Barge 2.12.1   4.14.111-barge   containerd://1.2.5+unknown
+node-01   Ready    <none>   17s   v1.14.1-k3s.4   192.168.65.101   <none>        Barge 2.12.1   4.14.111-barge   containerd://1.2.5+unknown
+node-02   Ready    <none>   3s    v1.14.1-k3s.4   192.168.65.102   <none>        Barge 2.12.1   4.14.111-barge   containerd://1.2.5+unknown
 ```
