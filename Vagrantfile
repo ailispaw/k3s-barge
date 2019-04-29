@@ -8,23 +8,15 @@ module VagrantPlugins
   end
 end
 
-K3S_VERSION     = "v0.3.0"
-NETWORK_ADAPTOR = "en0: Wi-Fi (Wireless)"
-NUM_OF_NODES    = 2
+K3S_VERSION  = "v0.4.0"
+BASE_IP_ADDR = "192.168.65"
+NUM_OF_NODES = 2
 
 Vagrant.configure(2) do |config|
   config.vm.box = "ailispaw/barge"
-  config.vm.network :public_network, bridge: NETWORK_ADAPTOR, use_dhcp_assigned_default_route: true
   config.vm.synced_folder ".", "/vagrant", id: "vagrant"
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--groups", "/k3s-barge"]
-  end
-
-  config.vm.provision :shell, run: "always" do |sh|
-    sh.inline = <<-EOT
-      # Ensure the default gateway is eth1
-      route del default dev eth0 2>/dev/null || true
-    EOT
   end
 
   config.vm.provision :shell do |sh|
@@ -53,32 +45,24 @@ Vagrant.configure(2) do |config|
 
       source /etc/os-release
       echo "Welcome to ${PRETTY_NAME}, $(k3s --version)" > /etc/motd
-
-      mkdir -p /vagrant/config
-      macaddr=$(cat /sys/class/net/eth1/address)
-      echo -n ${macaddr//:} > /vagrant/config/$(hostname -s)-mac
     EOT
   end
 
   config.vm.define "master" do |node|
     node.vm.hostname = "master.k3s.local"
-    if (File.exist?("config/master-mac"))
-      node.vm.provider :virtualbox do |vb|
-        vb.customize ["modifyvm", :id, "--macaddress2", File.read("config/master-mac")]
-      end
-    end
+    node.vm.network :private_network, ip: "#{BASE_IP_ADDR}.100"
     node.vm.provision :shell do |sh|
       sh.inline = <<-EOT
         cd /opt/bin
         ln -s k3s kubectl
         kubectl completion bash > /etc/bash_completion.d/kubectl
 
+        echo "K3S_EXTRA_ARGS=\\"--node-ip=#{BASE_IP_ADDR}.100 --flannel-iface=eth1\\"" > /etc/default/k3s-server
+
         cd /etc/init.d
         cp /vagrant/scripts/k3s-server k3s-server
         ln -s k3s-server S70k3s-server
         /etc/init.d/k3s-server start
-
-        ifconfig eth1 | sed -En 's/.*inet (addr:)?(([0-9]*\\.){3}[0-9]*).*/\\2/p' > /vagrant/config/master-ip
 
         NODE_TOKEN="/var/lib/rancher/k3s/server/node-token"
         while [ ! -f ${NODE_TOKEN} ]; do
@@ -92,15 +76,12 @@ Vagrant.configure(2) do |config|
   (1..NUM_OF_NODES).each do |i|
     config.vm.define "node-%02d" % i do |node|
       node.vm.hostname = "node-%02d.k3s.local" % i
-      if (File.exist?("config/node-%02d-mac" % i))
-        node.vm.provider :virtualbox do |vb|
-          vb.customize ["modifyvm", :id, "--macaddress2", File.read("config/node-%02d-mac" % i)]
-        end
-      end
+      node.vm.network :private_network, ip: "#{BASE_IP_ADDR}.#{100+i}"
       node.vm.provision :shell do |sh|
         sh.inline = <<-EOT
-          echo "SERVER_URL=\\"https://$(cat /vagrant/config/master-ip):6443\\"" > /etc/default/k3s-agent
+          echo "SERVER_URL=\\"https://#{BASE_IP_ADDR}.100:6443\\"" > /etc/default/k3s-agent
           echo "NODE_TOKEN=\\"$(cat /vagrant/config/node-token)\\"" >> /etc/default/k3s-agent
+          echo "K3S_EXTRA_ARGS=\\"--node-ip=#{BASE_IP_ADDR}.#{100+i} --flannel-iface=eth1\\"" >> /etc/default/k3s-agent
 
           cd /etc/init.d
           cp /vagrant/scripts/k3s-agent k3s-agent
