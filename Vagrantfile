@@ -8,7 +8,7 @@ module VagrantPlugins
   end
 end
 
-K3S_VERSION  = "v0.4.0"
+K3S_VERSION  = "v0.5.0"
 BASE_IP_ADDR = "192.168.65"
 NUM_OF_NODES = 2
 
