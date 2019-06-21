@@ -80,15 +80,19 @@ Vagrant.configure(2) do |config|
         cp -f /tmp/linux-amd64/helm /opt/bin/helm
         rm -rf /tmp/linux-amd64
 
-        kubectl create serviceaccount --namespace kube-system tiller
-        kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-        helm init --service-account tiller --kubeconfig /etc/rancher/k3s/k3s.yaml
-
         helm completion bash > /etc/bash_completion.d/helm
 
         chmod 0640 /etc/rancher/k3s/k3s.yaml
         chgrp bargees /etc/rancher/k3s/k3s.yaml
         echo "\nexport KUBECONFIG=\\"/etc/rancher/k3s/k3s.yaml\\"" >> /etc/bashrc
+      EOT
+    end
+    node.vm.provision :shell do |sh|
+      sh.privileged = false
+      sh.inline = <<-EOT
+        kubectl create serviceaccount --namespace kube-system tiller
+        kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+        helm init --service-account tiller
       EOT
     end
   end

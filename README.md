@@ -29,4 +29,7 @@ NAME      STATUS   ROLES    AGE   VERSION         INTERNAL-IP      EXTERNAL-IP  
 master    Ready    master   33s   v1.14.3-k3s.1   192.168.65.100   <none>        Barge 2.13.0   4.14.125-barge   containerd://1.2.5+unknown
 node-01   Ready    worker   14s   v1.14.3-k3s.1   192.168.65.101   <none>        Barge 2.13.0   4.14.125-barge   containerd://1.2.5+unknown
 node-02   Ready    worker   1s    v1.14.3-k3s.1   192.168.65.102   <none>        Barge 2.13.0   4.14.125-barge   containerd://1.2.5+unknown
+[bargee@master ~]$ helm version
+Client: &version.Version{SemVer:"v2.14.1", GitCommit:"5270352a09c7e8b6e8c9593002a73535276507c0", GitTreeState:"clean"}
+Server: &version.Version{SemVer:"v2.14.1", GitCommit:"5270352a09c7e8b6e8c9593002a73535276507c0", GitTreeState:"clean"}
 ```
