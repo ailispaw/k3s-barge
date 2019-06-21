@@ -9,6 +9,8 @@ module VagrantPlugins
 end
 
 K3S_VERSION  = "v0.5.0"
+HELM_VERSION = "v2.14.1"
+
 BASE_IP_ADDR = "192.168.65"
 NUM_OF_NODES = 2
 
@@ -69,6 +71,22 @@ Vagrant.configure(2) do |config|
           sleep 1
         done
         cp ${NODE_TOKEN} /vagrant/config/node-token
+
+        if [ ! -f "/vagrant/dl/helm-#{HELM_VERSION}-linux-amd64.tar.gz" ]; then
+          wget -nv https://get.helm.sh/helm-#{HELM_VERSION}-linux-amd64.tar.gz \
+            -O /vagrant/dl/helm-#{HELM_VERSION}-linux-amd64.tar.gz
+        fi
+        tar zxf /vagrant/dl/helm-#{HELM_VERSION}-linux-amd64.tar.gz -C /tmp
+        cp -f /tmp/linux-amd64/helm /opt/bin/helm
+        rm -rf /tmp/linux-amd64
+
+        kubectl create serviceaccount --namespace kube-system tiller
+        kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+        helm init --service-account tiller --kubeconfig /etc/rancher/k3s/k3s.yaml
+
+        helm completion bash > /etc/bash_completion.d/helm
+
+        echo "\nexport KUBECONFIG=\\"/etc/rancher/k3s/k3s.yaml\\"" >> /etc/bashrc
       EOT
     end
   end
