@@ -8,7 +8,7 @@ module VagrantPlugins
   end
 end
 
-K3S_VERSION  = "v0.6.1"
+K3S_VERSION  = "v0.7.0"
 HELM_VERSION = "v2.14.1"
 
 BASE_IP_ADDR = "192.168.65"
@@ -44,6 +44,7 @@ Vagrant.configure(2) do |config|
       cd /opt/bin
       ln -s k3s crictl
       crictl completion > /etc/bash_completion.d/crictl
+      ln -s k3s ctr
 
       source /etc/os-release
       echo "Welcome to ${PRETTY_NAME}, $(k3s --version)" > /etc/motd
@@ -59,7 +60,7 @@ Vagrant.configure(2) do |config|
         ln -s k3s kubectl
         kubectl completion bash > /etc/bash_completion.d/kubectl
 
-        echo "K3S_EXTRA_ARGS=\\"--node-ip=#{BASE_IP_ADDR}.100 --flannel-iface=eth1\\"" > /etc/default/k3s-server
+        echo "K3S_EXTRA_ARGS=\\"--flannel-iface=eth1\\"" > /etc/default/k3s-server
 
         cd /etc/init.d
         cp /vagrant/scripts/k3s-server k3s-server
@@ -105,7 +106,7 @@ Vagrant.configure(2) do |config|
         sh.inline = <<-EOT
           echo "SERVER_URL=\\"https://#{BASE_IP_ADDR}.100:6443\\"" > /etc/default/k3s-agent
           echo "NODE_TOKEN=\\"$(cat /vagrant/config/node-token)\\"" >> /etc/default/k3s-agent
-          echo "K3S_EXTRA_ARGS=\\"--node-ip=#{BASE_IP_ADDR}.#{100+i} --flannel-iface=eth1\\"" >> /etc/default/k3s-agent
+          echo "K3S_EXTRA_ARGS=\\"--flannel-iface=eth1\\"" >> /etc/default/k3s-agent
 
           cd /etc/init.d
           cp /vagrant/scripts/k3s-agent k3s-agent
