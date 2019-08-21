@@ -83,9 +83,13 @@ Vagrant.configure(2) do |config|
 
         helm completion bash > /etc/bash_completion.d/helm
 
+        echo "\nexport KUBECONFIG=\\"/etc/rancher/k3s/k3s.yaml\\"" >> /etc/bashrc
+      EOT
+    end
+    node.vm.provision :shell, run: "always" do |sh|
+      sh.inline = <<-EOT
         chmod 0640 /etc/rancher/k3s/k3s.yaml
         chgrp bargees /etc/rancher/k3s/k3s.yaml
-        echo "\nexport KUBECONFIG=\\"/etc/rancher/k3s/k3s.yaml\\"" >> /etc/bashrc
       EOT
     end
     node.vm.provision :shell do |sh|
