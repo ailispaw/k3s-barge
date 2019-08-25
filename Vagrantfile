@@ -53,6 +53,9 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "master" do |node|
     node.vm.hostname = "master.k3s.local"
+    node.vm.provider :virtualbox do |vb|
+      vb.memory = 2048
+    end
     node.vm.network :private_network, ip: "#{BASE_IP_ADDR}.100"
     node.vm.provision :shell do |sh|
       sh.inline = <<-EOT
@@ -105,6 +108,9 @@ Vagrant.configure(2) do |config|
   (1..NUM_OF_NODES).each do |i|
     config.vm.define "node-%02d" % i do |node|
       node.vm.hostname = "node-%02d.k3s.local" % i
+      node.vm.provider :virtualbox do |vb|
+        vb.memory = 1024
+      end
       node.vm.network :private_network, ip: "#{BASE_IP_ADDR}.#{100+i}"
       node.vm.provision :shell do |sh|
         sh.inline = <<-EOT
