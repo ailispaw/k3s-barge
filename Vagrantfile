@@ -93,6 +93,9 @@ Vagrant.configure(2) do |config|
       sh.inline = <<-EOT
         chmod 0640 /etc/rancher/k3s/k3s.yaml
         chgrp bargees /etc/rancher/k3s/k3s.yaml
+
+        pkg install jq
+        pkg install openssl
       EOT
     end
     node.vm.provision :shell do |sh|
