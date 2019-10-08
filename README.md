@@ -23,12 +23,12 @@ $ vagrant up
 
 ```
 $ vagrant ssh master
-Welcome to Barge 2.13.0, k3s version v0.8.1 (d116e74a)
+Welcome to Barge 2.13.0, k3s version v0.9.1 (755bd1c6)
 [bargee@master ~]$ kubectl get nodes -o wide
 NAME      STATUS   ROLES    AGE   VERSION         INTERNAL-IP      EXTERNAL-IP   OS-IMAGE       KERNEL-VERSION   CONTAINER-RUNTIME
-master    Ready    master   35s   v1.14.6-k3s.1   192.168.65.100   <none>        Barge 2.13.0   4.14.125-barge   containerd://1.2.7-k3s1
-node-01   Ready    worker   15s   v1.14.6-k3s.1   192.168.65.101   <none>        Barge 2.13.0   4.14.125-barge   containerd://1.2.7-k3s1
-node-02   Ready    worker   2s    v1.14.6-k3s.1   192.168.65.102   <none>        Barge 2.13.0   4.14.125-barge   containerd://1.2.7-k3s1
+master    Ready    master   34s   v1.15.4-k3s.1   192.168.65.100   <none>        Barge 2.13.0   4.14.125-barge   containerd://1.2.8-k3s.1
+node-01   Ready    worker   14s   v1.15.4-k3s.1   192.168.65.101   <none>        Barge 2.13.0   4.14.125-barge   containerd://1.2.8-k3s.1
+node-02   Ready    worker   0s    v1.15.4-k3s.1   192.168.65.102   <none>        Barge 2.13.0   4.14.125-barge   containerd://1.2.8-k3s.1
 [bargee@master ~]$ helm version
 Client: &version.Version{SemVer:"v2.14.3", GitCommit:"0e7f3b6637f7af8fcfddb3d2941fcc7cbebb0085", GitTreeState:"clean"}
 Server: &version.Version{SemVer:"v2.14.3", GitCommit:"0e7f3b6637f7af8fcfddb3d2941fcc7cbebb0085", GitTreeState:"clean"}
