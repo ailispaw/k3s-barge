@@ -30,6 +30,5 @@ master    Ready    master   33s   v1.16.13+k3s1   192.168.65.100   <none>       
 node-01   Ready    <none>   16s   v1.16.13+k3s1   192.168.65.101   <none>        Barge 2.13.0   4.14.125-barge   containerd://1.3.0-k3s.5
 node-02   Ready    <none>   1s    v1.16.13+k3s1   192.168.65.102   <none>        Barge 2.13.0   4.14.125-barge   containerd://1.3.0-k3s.5
 [bargee@master ~]$ helm version
-Client: &version.Version{SemVer:"v2.14.3", GitCommit:"0e7f3b6637f7af8fcfddb3d2941fcc7cbebb0085", GitTreeState:"clean"}
-Server: &version.Version{SemVer:"v2.14.3", GitCommit:"0e7f3b6637f7af8fcfddb3d2941fcc7cbebb0085", GitTreeState:"clean"}
+version.BuildInfo{Version:"v3.2.4", GitCommit:"0ad800ef43d3b826f31a5ad8dfbb4fe05d143688", GitTreeState:"clean", GoVersion:"go1.13.12"}
 ```

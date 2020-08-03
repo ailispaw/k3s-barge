@@ -9,7 +9,7 @@ module VagrantPlugins
 end
 
 K3S_VERSION  = "v1.16.13+k3s1"
-HELM_VERSION = "v2.14.3"
+HELM_VERSION = "v3.2.4"
 
 BASE_IP_ADDR = "192.168.65"
 NUM_OF_NODES = 2
@@ -93,14 +93,6 @@ Vagrant.configure(2) do |config|
       sh.inline = <<-EOT
         chmod 0640 /etc/rancher/k3s/k3s.yaml
         chgrp bargees /etc/rancher/k3s/k3s.yaml
-      EOT
-    end
-    node.vm.provision :shell do |sh|
-      sh.privileged = false
-      sh.inline = <<-EOT
-        kubectl create serviceaccount --namespace kube-system tiller
-        kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-        helm init --service-account tiller
       EOT
     end
   end
