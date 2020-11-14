@@ -1,6 +1,6 @@
 
 # Make data persistent
-for i in var/lib/cni var/lib/rancher var/log/containers var/log/pods \
+for i in var/lib/cni var/lib/kubelet var/lib/rancher var/log/containers var/log/pods \
   run/containerd run/flannel run/k3s ; do
   rm -rf "/$i"
   mkdir -p "/mnt/data/$i"
