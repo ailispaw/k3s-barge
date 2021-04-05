@@ -31,5 +31,5 @@ master    Ready      master   35s   v1.18.17+k3s1   192.168.65.100   <none>     
 node-02   NotReady   <none>   0s    v1.18.17+k3s1   192.168.65.102   <none>        Barge 2.13.0   4.14.125-barge   containerd://1.3.10-k3s2
 [bargee@master ~]$ helm version
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /etc/rancher/k3s/k3s.yaml
-version.BuildInfo{Version:"v3.4.1", GitCommit:"c4e74854886b2efe3321e185578e6db9be0a6e29", GitTreeState:"clean", GoVersion:"go1.14.11"}
+version.BuildInfo{Version:"v3.5.3", GitCommit:"041ce5a2c17a58be0fcd5f5e16fb3e7e95fea622", GitTreeState:"dirty", GoVersion:"go1.15.8"}
 ```
