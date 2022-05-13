@@ -8,8 +8,8 @@ module VagrantPlugins
   end
 end
 
-K3S_VERSION  = "v1.18.17+k3s1"
-HELM_VERSION = "v3.5.3"
+K3S_VERSION  = "v1.23.6+k3s1"
+HELM_VERSION = "v3.9.0"
 
 BASE_IP_ADDR = "192.168.56"
 NUM_OF_NODES = 2
@@ -43,7 +43,6 @@ Vagrant.configure(2) do |config|
 
       cd /opt/bin
       ln -s k3s crictl
-      crictl completion > /etc/bash_completion.d/crictl
       ln -s k3s ctr
 
       source /etc/os-release
@@ -85,6 +84,8 @@ Vagrant.configure(2) do |config|
         rm -rf /tmp/linux-amd64
 
         helm completion bash > /etc/bash_completion.d/helm
+
+        crictl completion > /etc/bash_completion.d/crictl
 
         echo "\nexport KUBECONFIG=\\"/etc/rancher/k3s/k3s.yaml\\"" >> /etc/bashrc
       EOT
