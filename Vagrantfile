@@ -11,7 +11,7 @@ end
 K3S_VERSION  = "v1.18.17+k3s1"
 HELM_VERSION = "v3.5.3"
 
-BASE_IP_ADDR = "192.168.65"
+BASE_IP_ADDR = "192.168.56"
 NUM_OF_NODES = 2
 
 Vagrant.configure(2) do |config|
@@ -56,7 +56,7 @@ Vagrant.configure(2) do |config|
     node.vm.provider :virtualbox do |vb|
       vb.memory = 2048
     end
-    node.vm.network :private_network, ip: "#{BASE_IP_ADDR}.100"
+    node.vm.network :private_network, ip: "#{BASE_IP_ADDR}.101"
     node.vm.provision :shell do |sh|
       sh.inline = <<-EOT
         cd /opt/bin
@@ -103,10 +103,10 @@ Vagrant.configure(2) do |config|
       node.vm.provider :virtualbox do |vb|
         vb.memory = 1024
       end
-      node.vm.network :private_network, ip: "#{BASE_IP_ADDR}.#{100+i}"
+      node.vm.network :private_network, ip: "#{BASE_IP_ADDR}.#{101+i}"
       node.vm.provision :shell do |sh|
         sh.inline = <<-EOT
-          echo "SERVER_URL=\\"https://#{BASE_IP_ADDR}.100:6443\\"" > /etc/default/k3s-agent
+          echo "SERVER_URL=\\"https://#{BASE_IP_ADDR}.101:6443\\"" > /etc/default/k3s-agent
           echo "NODE_TOKEN=\\"$(cat /vagrant/config/node-token)\\"" >> /etc/default/k3s-agent
           echo "K3S_EXTRA_ARGS=\\"--flannel-iface=eth1\\"" >> /etc/default/k3s-agent
 
