@@ -8,7 +8,7 @@ module VagrantPlugins
   end
 end
 
-K3S_VERSION  = "v1.23.6+k3s1"
+K3S_VERSION  = "v1.24.1+k3s1"
 HELM_VERSION = "v3.9.0"
 
 BASE_IP_ADDR = "192.168.56"
